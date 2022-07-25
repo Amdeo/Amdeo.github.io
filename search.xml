@@ -8928,4 +8928,142 @@
 <p><strong>GCC特性</strong>：除支持C/C++/ Objective-C/Objective-C++语言外，还是支持Java/Ada/Fortran/Go等；当前的Clang的C++支持落后于GCC；支持更多平台；更流行，广泛使用，支持完备。<br><strong>Clang特性</strong>：编译速度快；内存占用小；兼容GCC；设计清晰简单、容易理解，易于扩展增强；基于库的模块化设计，易于IDE集成；出错提示更友好。</p>
 ]]></content>
   </entry>
+  <entry>
+    <title>前端开发知识收集</title>
+    <url>/2022/07/20/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%94%B6%E9%9B%86/</url>
+    <content><![CDATA[<h3 id="获取浏览器大小"><a href="#获取浏览器大小" class="headerlink" title="获取浏览器大小"></a>获取浏览器大小</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.innerWidth</span><br><span class="line"><span class="built_in">window</span>.innerHeight</span><br></pre></td></tr></table></figure>
+
+<h3 id="var变量提升"><a href="#var变量提升" class="headerlink" title="var变量提升"></a>var变量提升</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// var 的情况</span></span><br><span class="line"><span class="built_in">console</span>.log(ar); <span class="comment">// 输出undefined</span></span><br><span class="line"><span class="keyword">var</span> ar = <span class="number">512</span>;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// let 的情况</span></span><br><span class="line"><span class="built_in">console</span>.log(et); <span class="comment">// 报错ReferenceError</span></span><br><span class="line"><span class="keyword">let</span> et = <span class="number">512</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="restful-规范"><a href="#restful-规范" class="headerlink" title="restful 规范"></a>restful 规范</h3><table>
+<thead>
+<tr>
+<th align="center">HTTP动词</th>
+<th><strong>URI路径</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">GET</td>
+<td>http://域名/news</td>
+<td>获取列表数据</td>
+</tr>
+<tr>
+<td align="center">GET</td>
+<td>http://域名/news/:id</td>
+<td>根据id获取一条数据</td>
+</tr>
+<tr>
+<td align="center">POST</td>
+<td>http://域名/news</td>
+<td>添加一条数据</td>
+</tr>
+<tr>
+<td align="center">PUT</td>
+<td>http://域名/news/:id</td>
+<td>根据id修改一条数据</td>
+</tr>
+<tr>
+<td align="center">DELETE</td>
+<td>http://域名/news/:id</td>
+<td>根据id“删除“一条数据</td>
+</tr>
+</tbody></table>
+<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>年份</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>require/exports</td>
+<td>2009</td>
+<td>CommonJS</td>
+</tr>
+<tr>
+<td>import/export</td>
+<td>2015</td>
+<td>ECMAScript2015（ES6）</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>require/exports</th>
+<th>import/export</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nodejs</td>
+<td>所有版本</td>
+<td>Node 9.0+（启动需加上 flag –experimental-modules）Node 13.2+（直接启动）</td>
+</tr>
+<tr>
+<td>Chorme</td>
+<td>不支持</td>
+<td>61+</td>
+</tr>
+<tr>
+<td>Firefox</td>
+<td>不支持</td>
+<td>60+</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>不支持</td>
+<td>10.1+</td>
+</tr>
+<tr>
+<td>Edge</td>
+<td>不支持</td>
+<td>16+</td>
+</tr>
+</tbody></table>
+<p>require/exports是运行时动态加载</p>
+<p>import/export是静态编译</p>
+<p>require/exports输出的是一个值的拷贝</p>
+<p>import/export模块输出的是值的引用</p>
+<h4 id="require-exports-的用法"><a href="#require-exports-的用法" class="headerlink" title="require/exports 的用法"></a>require/exports 的用法</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line">exports.fs = fs</span><br><span class="line"><span class="built_in">module</span>.exports = fs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//utils.js</span></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">exports.a = <span class="number">200</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">module</span>.exports) <span class="comment">//&#123;a : 200&#125;</span></span><br><span class="line">exports = &#123;<span class="attr">a</span>:<span class="number">300</span>&#125;; <span class="comment">//exports 指向其他内存区</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//test.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="string">'./utils'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 打印为 &#123;a : 200&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">a.js</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params">args</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// body...</span></span><br><span class="line">    <span class="built_in">console</span>.log(args);  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    test</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">b.js</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; test &#125; = <span class="built_in">require</span>(<span class="string">'./a.js'</span>);</span><br><span class="line"></span><br><span class="line">test(<span class="string">'this is a test.'</span>);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>引入 export default 导出的模块不用加 {},引入非 export default 导出的模块需要加 {}。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import fileSystem, &#123;readFile&#125; from &#39;fs&#39;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">a.js:</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params">args</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// body...</span></span><br><span class="line">    <span class="built_in">console</span>.log(args);  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认导出模块，一个文件中只能定义一个</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;...&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> name = <span class="string">"lyn"</span>;</span><br><span class="line"></span><br><span class="line">b.js:</span><br><span class="line"></span><br><span class="line"><span class="comment">// _代表引入的export default的内容</span></span><br><span class="line"><span class="keyword">import</span> _, &#123; test, name &#125; <span class="keyword">from</span> <span class="string">'./a.js'</span>;</span><br><span class="line"></span><br><span class="line">test(<span class="string">`my name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>C++ primer</title>
+    <url>/2022/07/17/cpp-primer/</url>
+    <content><![CDATA[<h2 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a>输入输出</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">df<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a, b;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a &lt;&lt; <span class="string">" "</span> &lt;&lt; b &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">结果</span><br><span class="line">1 2</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入</span><br><span class="line">1 2</span><br><span class="line"></span><br><span class="line">结果</span><br><span class="line">1 2</span><br></pre></td></tr></table></figure>
+
+<p>通过测试发现<br>cin遇到空格和回车，表示一个变量赋值结束</p>
+<h2 id="const限定符"><a href="#const限定符" class="headerlink" title="const限定符"></a>const限定符</h2><p>const 修饰普通变量，变量不能修改</p>
+<p>const 修改对象，对象只能访问被const修饰的函数，和不能修改成员变量</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetAge</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> age &#123;<span class="number">10</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> height&#123;<span class="number">20</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> Student b;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; b.GetAge() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; b.height &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// b.height = 2; 不能修改成员变量</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>编程语言</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
 </search>
