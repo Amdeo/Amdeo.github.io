@@ -3419,12 +3419,38 @@
 <p>设置项目名称</p>
 <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">project</span>(demo)</span><br></pre></td></tr></table></figure>
 
+<p>定义变量或者为变量赋值</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span>(haha <span class="string">"xxx"</span>) <span class="comment"># 这个是自定义变量</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)    <span class="comment"># 这个为CMAKE_CXX_STANDARD赋值</span></span><br></pre></td></tr></table></figure>
+
 <p>设置编译输出</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">add_executable</span>(demo demo.cpp) <span class="comment"># 生成可执行文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>(common STATIC util.cpp) <span class="comment"># 生成静态库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>(common SHARED util.cpp) <span class="comment"># 生成动态库或共享库</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">add_executable</span>(demo demo.cpp) <span class="comment"># 生成可执行文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>(common STATIC util.cpp) <span class="comment"># 生成静态库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>(common SHARED util.cpp) <span class="comment"># 生成动态库或共享库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_subdirectory</span>(&lt;指定一个目录&gt; &lt;指定目录存放输出文件&gt;)</span><br></pre></td></tr></table></figure>
 
 <p>搜索cpp文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">aux_source_directory(dir VAR)</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">aux_source_directory</span>(dir VAR)</span><br></pre></td></tr></table></figure>
 
+<p>为目标文件链接依赖的库</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">target_link_libraries</span>(&lt;<span class="keyword">target</span>&gt; &lt;lib&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>指定目录添加到编译器的头文件搜索路劲之下</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">include_directories</span>(&lt;指定目录&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>从指定的文件加载、运行CMake代码</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">include</span>(&lt;<span class="keyword">file</span>|moudle&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>在编译目标文件<target>时指定头文件</target></p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">target_include_directories</span>(&lt;<span class="keyword">target</span>&gt; &lt;头文件目录&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>为链接器添加库的搜索路径</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">link_directories</span>(路径)</span><br></pre></td></tr></table></figure>
+
+<p>加载外部库到项目中</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">find_package</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h3><p>PUBLIC: 修饰的库或者目标会被链接，并成为链接接口的一部分</p>
+<p>PRIVATE: 修饰的目标或库会被链接，但不能链接接口的一部分</p>
+<p>INTERFACE: 修饰的库会被追加到链接接口中，但不会用来链接目标文件<target></target></p>
 ]]></content>
       <categories>
         <category>工具</category>
