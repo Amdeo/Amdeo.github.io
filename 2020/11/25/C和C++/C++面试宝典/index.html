@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="深入人心的面试宝典C++ 内存分布 主要关注：  全局区 （包含全局变量和静态变量），静态变量可以看做有作用域的全局变量 bss：存放为未初始化的全局变量和静态变量(包含值为0的)，这是全零的一段空间。 data：存放已经初始化的全局变量和静态变量   代码段：这个区域的内容无法修改，只读，存放程序执行代码和存放只读的字符串常量。 栈区：存放局部变量、函数参数、返回值等 堆区：由程序员手动申请的内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++面试宝典">
+<meta property="og:url" content="http://www.yuandongbin.xyz/2020/11/25/C%E5%92%8CC++/C++%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8/index.html">
+<meta property="og:site_name" content="袁栋彬的主页">
+<meta property="og:description" content="深入人心的面试宝典C++ 内存分布 主要关注：  全局区 （包含全局变量和静态变量），静态变量可以看做有作用域的全局变量 bss：存放为未初始化的全局变量和静态变量(包含值为0的)，这是全零的一段空间。 data：存放已经初始化的全局变量和静态变量   代码段：这个区域的内容无法修改，只读，存放程序执行代码和存放只读的字符串常量。 栈区：存放局部变量、函数参数、返回值等 堆区：由程序员手动申请的内">
+<meta property="og:image" content="https://raw.githubusercontent.com/Amdeo/blogImg/main/img/20221010152234.png">
+<meta property="article:published_time" content="2020-11-25T15:16:35.000Z">
+<meta property="article:modified_time" content="2022-10-10T13:52:16.312Z">
+<meta property="article:author" content="cooper yuan">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Amdeo/blogImg/main/img/20221010152234.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yuandongbin.xyz/2020/11/25/C和C++/C++面试宝典/"/>
+
+
+
+
+
+  <title>C++面试宝典 | 袁栋彬的主页</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">袁栋彬的主页</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" target="_self" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yuandongbin.xyz/2020/11/25/C%E5%92%8CC++/C++%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="cooper yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="袁栋彬的主页">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++面试宝典</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-25T23:16:35+08:00">
+                2020-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+          
+            <span class="post-updated">
+              &nbsp; | &nbsp; 更新于
+              <time itemprop="dateUpdated" datetime="2022-10-10T21:52:16+08:00" content="2022-10-10">
+                2022-10-10
+              </time>
+            </span>
+          
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="深入人心的面试宝典"><a href="#深入人心的面试宝典" class="headerlink" title="深入人心的面试宝典"></a>深入人心的面试宝典</h1><h2 id="C-内存分布"><a href="#C-内存分布" class="headerlink" title="C++ 内存分布"></a>C++ 内存分布</h2><p><img src="https://raw.githubusercontent.com/Amdeo/blogImg/main/img/20221010152234.png" alt></p>
+<p>主要关注：</p>
+<ul>
+<li><strong>全局区</strong> （包含全局变量和静态变量），静态变量可以看做有作用域的全局变量<ul>
+<li>bss：存放为未初始化的全局变量和静态变量(包含值为0的)，这是全零的一段空间。</li>
+<li>data：存放已经初始化的全局变量和静态变量</li>
+</ul>
+</li>
+<li><strong>代码段</strong>：这个区域的内容无法修改，只读，存放程序执行代码和存放只读的字符串常量。</li>
+<li><strong>栈区</strong>：存放局部变量、函数参数、返回值等</li>
+<li><strong>堆区</strong>：由程序员手动申请的内存区域</li>
+</ul>
+<h2 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h2><h3 id="和-的用法"><a href="#和-的用法" class="headerlink" title="#和##的用法"></a>#和##的用法</h3><h4 id="字符串化操作符"><a href="#字符串化操作符" class="headerlink" title="#字符串化操作符"></a>#字符串化操作符</h4><p>作用：将宏定义中的传入参数名转换成用一对双引号括起来参数名字符串。其只能用于传入参数的宏定义中，且必须置于宏定义体中的参数名前。</p>
+<h4 id="符号连接操作符"><a href="#符号连接操作符" class="headerlink" title="## 符号连接操作符"></a>## 符号连接操作符</h4><p>作用：将宏定义参数和其他标识进行拼接，生成新的标识。</p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><h3 id="构造函数为什么不能声明为虚函数"><a href="#构造函数为什么不能声明为虚函数" class="headerlink" title="构造函数为什么不能声明为虚函数"></a>构造函数为什么不能声明为虚函数</h3><p>我们要知道虚函数原理，虚函数是存放在虚函数表中，是通过一个虚表指针vptr指向它的，vptr是在构造对象时生成的，在构造对象过程中，虚函数表还没有初始化。</p>
+<h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><h3 id="有什么用？"><a href="#有什么用？" class="headerlink" title="有什么用？"></a>有什么用？</h3><p>在对象生命周期结束时，系统会自动执行析构函数，完成一些类对象的资源的清理。</p>
+<ul>
+<li>栈对象，在生命周期结束时，会自动调用析构函数</li>
+<li>堆对象，在使用delete ptr时，才会调用析构函数</li>
+</ul>
+<h3 id="析构函数什么情况定义为virtual"><a href="#析构函数什么情况定义为virtual" class="headerlink" title="析构函数什么情况定义为virtual"></a>析构函数什么情况定义为virtual</h3><p>当类作为基类被继承时，就应该将析构函数定义为virtual。</p>
+<p>使用基类指针指向子类对象时，如果想要通过基类指针释放子类对象时(如 delete ptr)，只有基类的析构函数为虚函数时，才会调用子类的析构函数。</p>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>多态，通俗点来讲就是多种状态，具体点就是去完成某个行为，当不同的对象去完成时会产生不同的状态。</p>
+<p>C++ 多态就是指多种形态，C++的多态分为静态多态和动态多态。</p>
+<h3 id="静态多态"><a href="#静态多态" class="headerlink" title="静态多态"></a>静态多态</h3><blockquote>
+<p>静态多态往往通过函数重载和模板(泛型编程)来实现的</p>
+</blockquote>
+<p>对于相关的对象类型，直接实现他们各自的定义，不需要共有基类，甚至没有任何关系。只需要各个具体类的实现中要求相同的接口声明，这里的接口称之为隐式接口，客服端将把操作这些对象的函数定位模板，当需要操作什么类型的对象时，直接对模板指定该类型实参即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"A::print()"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"B::print()"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">entry</span><span class="params">(<span class="keyword">const</span> T&amp; obj)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    obj.print();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    A a;</span><br><span class="line">    B b;</span><br><span class="line">    entry&lt;A&gt;(a);</span><br><span class="line">    entry&lt;B&gt;(b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>模板是编译期就生成对应的代码，编译期就绑定了函数地址</p>
+<p>函数重载也算静态多态</p>
+<h3 id="动态多态"><a href="#动态多态" class="headerlink" title="动态多态"></a>动态多态</h3><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>当一个类中声明了虚函数，编译器会自动给这个类添加一个成员（虚表指针），虚表指针指向一个存放虚函数指针的一个数组。</p>
+<ul>
+<li><p>虚函数表是一个存储类成员函数指针的数据结构，是由编译期自动生成和维护的。当存在虚函数时，每个对象中都有一个指向虚函数的指针vptr, vptr 一般作为类对象的第一个成员。</p>
+</li>
+<li><p>一个有虚函数的类拥有一个虚表，所有这个类的实例使用这一个虚表</p>
+</li>
+<li><p>虚表结尾一定是nullptr</p>
+</li>
+</ul>
+<h4 id="单继承"><a href="#单继承" class="headerlink" title="单继承"></a>单继承</h4><p>当继承一个基类（拥有虚函数），也会继承它的虚表，但是派生类中是一个新的虚表，派生类如果重写虚函数，就会覆盖虚表中的虚函数地址，派生类中新的虚函数也会追加到虚表中。</p>
+<h4 id="多继承"><a href="#多继承" class="headerlink" title="多继承"></a>多继承</h4><p>多继承是，继承几个基类就会有几个虚表指针</p>
+<ul>
+<li>如果多个基类拥有相同的虚函数，派生类重写了这个函数，会将这几个基类的虚表中虚函数都覆盖</li>
+<li>派生类新增的虚函数，会添加到第一个继承的基类虚表中</li>
+</ul>
+<p>多态时，父类指针指向子类对象，就会调用哪个子类的虚函数，因为可以在虚表中查找对应的虚函数。</p>
+<h2 id="C-锁"><a href="#C-锁" class="headerlink" title="C++ 锁"></a>C++ 锁</h2><blockquote>
+<p>顾名思义：锁的目的就是为保护，这里的锁就是保护资源，只有开了锁，其他人才能使用。</p>
+</blockquote>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><p>互斥锁，顾名思义：一旦一个线程lock，其他线程想要获得锁，只能等之前获得锁的线程unlock，其他线程才能获得锁。</p>
+<h3 id="递归锁"><a href="#递归锁" class="headerlink" title="递归锁"></a>递归锁</h3><p>一般的互斥量对于同一个线程只能同时加锁一次，如果同时加锁两次就会出现死锁。</p>
+<p>使用场景：一个函数内加锁，还没有解锁，调用了另外一个函数，被调用的函数里面也加了锁，这个时候就出现死锁。</p>
+<p>为了解决这个问题，引入的递归锁，同一线程中多次加锁，实现原理就是，只有第一次才真正的加锁，但是会记录加锁计数，解锁也需要相同次数，才可以解锁。</p>
+<h3 id="自旋锁-spin-lock"><a href="#自旋锁-spin-lock" class="headerlink" title="自旋锁(spin lock)"></a>自旋锁(spin lock)</h3><p>互斥锁，如果不能获取加锁，将自己阻塞起来，就会进入睡眠</p>
+<p>自旋锁，如果不能获取加锁，就会循环判断，一直循环到可以获取到锁，自旋锁。</p>
+<p>从这两个概念一看，自旋锁效率会高。</p>
+<p><strong>解决什么问题?</strong></p>
+<p>因为互斥锁获取不了锁，进入让线程进入阻塞状态，要知道切换这个状态需要线程在内核态和用户态进行切换，这个阶段很浪费时间。</p>
+<p>自旋锁，一直在用户态，不涉及线程切换，不断循环判断锁是否已经可以获取了，当然也带了一个问题，自旋锁长时间占用CPU，对性能是一种损耗。</p>
+<p>使用场景：就是等待的锁的时间短，减少长时间占用CPU，又能很快加锁，大大的提升效率。</p>
+<h3 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h3><p>顾名思义：有读锁和写锁</p>
+<p>它解决了一个什么问题呢</p>
+<p>当一个共享变量，读多写少的场景下，我们就可以使用读写锁。</p>
+<ul>
+<li>读锁在已经已锁定场景下，其他线程也可以对读锁上锁，当读锁上锁场景下，写锁不能上锁</li>
+<li>写锁上锁后，所有的上锁操作都会阻塞。</li>
+</ul>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>死锁有很多场景</p>
+<p>场景1：一个线程上了锁，发生异常退出，没有释放锁，其他线程只能一直等待锁释放，此时就是发生死锁。</p>
+<p>场景2：线程A先获取锁1，线程B获取锁2，此时线程A需要再获取锁2才能执行，而线程B也需要获取锁1才能继续执行，两个线程都在等在对方释放锁。</p>
+<p>怎么解决死锁？</p>
+<ul>
+<li>如果使用过多的锁，那就是程序设计上出现了问题，能少用锁就少用锁。</li>
+</ul>
+<h2 id="C-智能指针"><a href="#C-智能指针" class="headerlink" title="C++智能指针"></a>C++智能指针</h2><blockquote>
+<p>用来专门管理指针的一个类</p>
+</blockquote>
+<p>解决什么问题?</p>
+<ul>
+<li>用来内存泄露</li>
+<li>就是会产生引用非法内存的指针</li>
+</ul>
+<h3 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h3><p>它的名字叫独占式指针</p>
+<p>unique_ptr对象管理的指针，独占所指向内存的所有权。</p>
+<p>简单的说它不允许其他智能指针共享其管理的对象</p>
+<p>因为这个类不能通过赋值将一个unique_ptr赋值给另一个unique_ptr。</p>
+<p>它可以通过move将所有权转移给另一个unique_ptr，一直保持只有一个智能指针管理那个对象。</p>
+<p>当unique_ptr离开作用域，它管理的对象也将被删除，如果想要手动删除unique_ptr智能指针管理的对象，</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ptr = <span class="literal">nullptr</span>;</span><br><span class="line">ptr.reset();</span><br></pre></td></tr></table></figure>
+
+<h3 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h3><blockquote>
+<p>共享式智能指针</p>
+</blockquote>
+<p>可以多个shared_ptr管理同一个对象</p>
+<p>shared_ptr内部有个int指针保存当前有多少个shared_ptr智能指针管理同一个对象。</p>
+<p>当shared_ptr 内部引用计数器为0的时候，才会释放对象。</p>
+<p>共享式智能指针会引入什么问题呢？</p>
+<p>循环引用，就是两个对象互相持有对方共享指针，双方都等在对方先释放，共享指针才能释放，最终导致两个对象无法释放。</p>
+<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3><p>这个智能指针是为shared_ptr大辅助用的，它指向一个shared_ptr管理的对象，但是weak_ptr不会增加shared_ptr的引用计数。</p>
+<p>它解决什么问题?</p>
+<p>解决了shared_ptr的循环引用的问题</p>
+<p>weak_ptr不能直接操作资源，需要先lock获取shared_ptr实例才能访问资源</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">shared_ptr_valid</span>(<span class="title">shared_ptr</span>&lt;T&gt; &amp;<span class="title">sp</span>)</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	weak_ptr&lt;T&gt; wp = sp;</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;T&gt; spCheck = wp.lock();</span><br><span class="line">	<span class="keyword">if</span>(spCheck == <span class="literal">nullptr</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"shared_ptr is invalid"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"shared_ptr is valid"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>lock方法会检查shared_ptr管理的对象有没有释放了，没有释放的话，创建新的shared_ptr 引用计数也会+1，通过shared_ptr来操作资源。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/24/%E5%89%8D%E7%AB%AF/Css-2D%E8%BD%AC%E6%8D%A2/" rel="next" title="css 2D转换">
+                <i class="fa fa-chevron-left"></i> css 2D转换
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/24/linux/crontab%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" rel="prev" title="crontab定时任务">
+                crontab定时任务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">cooper yuan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/amdeo" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深入人心的面试宝典"><span class="nav-number">1.</span> <span class="nav-text">深入人心的面试宝典</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-内存分布"><span class="nav-number">1.1.</span> <span class="nav-text">C++ 内存分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宏"><span class="nav-number">1.2.</span> <span class="nav-text">宏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#和-的用法"><span class="nav-number">1.2.1.</span> <span class="nav-text">#和##的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串化操作符"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">#字符串化操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#符号连接操作符"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">## 符号连接操作符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">1.3.</span> <span class="nav-text">构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数为什么不能声明为虚函数"><span class="nav-number">1.3.1.</span> <span class="nav-text">构造函数为什么不能声明为虚函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">1.4.</span> <span class="nav-text">析构函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#有什么用？"><span class="nav-number">1.4.1.</span> <span class="nav-text">有什么用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#析构函数什么情况定义为virtual"><span class="nav-number">1.4.2.</span> <span class="nav-text">析构函数什么情况定义为virtual</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态"><span class="nav-number">1.5.</span> <span class="nav-text">多态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态多态"><span class="nav-number">1.5.1.</span> <span class="nav-text">静态多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态多态"><span class="nav-number">1.5.2.</span> <span class="nav-text">动态多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.5.3.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单继承"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">单继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多继承"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">多继承</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-锁"><span class="nav-number">1.6.</span> <span class="nav-text">C++ 锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥锁"><span class="nav-number">1.6.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#递归锁"><span class="nav-number">1.6.2.</span> <span class="nav-text">递归锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自旋锁-spin-lock"><span class="nav-number">1.6.3.</span> <span class="nav-text">自旋锁(spin lock)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读写锁"><span class="nav-number">1.6.4.</span> <span class="nav-text">读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁"><span class="nav-number">1.6.5.</span> <span class="nav-text">死锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-智能指针"><span class="nav-number">1.7.</span> <span class="nav-text">C++智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unique-ptr"><span class="nav-number">1.7.1.</span> <span class="nav-text">unique_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shared-ptr"><span class="nav-number">1.7.2.</span> <span class="nav-text">shared_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#weak-ptr"><span class="nav-number">1.7.3.</span> <span class="nav-text">weak_ptr</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cooper yuan</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a target="_blank" href="https://beian.miit.gov.cn">苏ICP备18059520号</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
